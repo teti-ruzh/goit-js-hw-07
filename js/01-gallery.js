@@ -29,12 +29,28 @@ galleryContainer.addEventListener ('click', onGalleryClick);
 
 function onGalleryClick(event) {
   event.preventDefault();
-if (!event.target.classList.contains('gallery__item')){
-  return;
+
+const isGalleryItem = event.target.classList.contains('gallery__image');
+  if (!isGalleryItem){
+    return
+  };
+
+function onCloseModal(event) {
+  const ESC_KEY_CODE = "Escape";
+
+  if (event.code === ESC_KEY_CODE) {
+    instance.close();
+  }
 }
+
 const instance = basicLightbox.create(`
     <img src="${event.target.dataset.source}" width="800" height="600">
-`).show();
+`, {
+  onShow: (instance) => {window.addEventListener('keydown', onCloseModal);},
+  onClose: (instance) => {window.removeEventListener('keydown', onCloseModal);}
+});
+
+instance.show();
 }
 
 
